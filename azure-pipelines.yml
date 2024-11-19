@@ -7,10 +7,13 @@ pool:
   vmImage: 'ubuntu-latest'  # Use an Ubuntu-based virtual machine for the build agent
 
 stages:
-  # Stage 1: Checkout the code
+
+  # Stage 1: Checkout the code from GitHub
   - stage: CheckoutCode
+    displayName: 'Checkout Code'
     jobs:
       - job: Checkout
+        displayName: 'Checkout Code Job'
         steps:
-          - task: Checkout@2  # Use the latest version for checking out the code
+          - checkout: self  # Checkout the code from the repository
             displayName: 'Checkout Code'
