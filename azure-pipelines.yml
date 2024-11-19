@@ -15,14 +15,3 @@ stages:
           - task: Checkout@1  # Checkout the code from GitHub
             displayName: 'Checkout Code'
 
-  # Stage 2: Validate (or Build) the project
-  - stage: Validate
-    dependsOn: CheckoutCode
-    jobs:
-      - job: ValidateHTML
-        steps:
-          - script: |
-              echo "Validating HTML file..."
-              # You can add any validation or linter for HTML, like:
-              # htmlhint index.html
-            displayName: 'Validate HTML file'
