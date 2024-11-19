@@ -1,0 +1,45 @@
+trigger:
+  branches:
+    include:
+      - main  # or the branch where the code is pushed
+
+pool:
+  vmImage: 'ubuntu-latest'  # We will use an Ubuntu agent for the build
+
+stages:
+  # Stage 1: Checkout the code
+  - stage: CheckoutCode
+    jobs:
+      - job: Checkout
+        steps:
+          - task: Checkout@1  # Checkout the code from GitHub
+            displayName: 'Checkout Code'
+
+  # Stage 2: Validate (or Build) the project
+  - stage: Validate
+    dependsOn: CheckoutCode
+    jobs:
+      - job: ValidateHTML
+        steps:
+          - script: |
+              echo "Validating HTML file..."
+              # You can add any validation or linter for HTML, like:
+              # htmlhint index.html
+            displayName: 'Validate HTML file'
+
+  # Stage 3: Deploy the code to Azure Blob Storage (Static Website)
+  - stage: Deploy
+    dependsOn: Validate
+    jobs:
+      - job: DeployToAzure
+        steps:
+          - task: AzureBlobFileCopy@2
+            inputs:
+              azureSubscription: 'My Azure Subscription'  # You need to connect your Azure account
+              sourcePath: '$(Build.SourcesDirectory)/index.html'  # Path to the HTML file
+              destination: '$(destinationContainer)'  # Container name in Azure Blob Storage
+              storageAccountName: '$(storageAccount)'  # Azure Storage account name
+              containerName: 'static-site'  # The blob container where the website will be stored
+              destinationContainer: 'static-site'  # Blob container name
+            displayName: 'Deploy to Azure Blob Storage'
+
