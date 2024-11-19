@@ -3,6 +3,8 @@ trigger:
     include:
       - main  # or the branch where the code is pushed
 
+variables:
+  azureSubscription: '5cd02d4e-097c-48e4-abaa-9003b43cd063'
 pool:
   vmImage: 'ubuntu-latest'  # We will use an Ubuntu agent for the build
 
