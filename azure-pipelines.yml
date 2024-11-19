@@ -17,3 +17,17 @@ stages:
         steps:
           - checkout: self  # Checkout the code from the repository
             displayName: 'Checkout Code'
+  - stage: ValidateHTML
+    displayName: 'Validate HTML Code'
+    dependsOn: CheckoutCode  # This stage will only run after CheckoutCode finishes
+    jobs:
+      - job: Validate
+        displayName: 'Validate HTML Job'
+        steps:
+          - script: |
+              echo "Validating HTML..."
+              # Install htmlhint to validate HTML code
+              npm install -g htmlhint
+              # Run htmlhint on your HTML file (e.g., index.html)
+              htmlhint index.html
+            displayName: 'Validate HTML file'
